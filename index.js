@@ -2,6 +2,11 @@ function App() {
   const self = this;
   var clock = new Clock();
 
+  const setEaserSelection = () => {
+    var selection = self.easerSelect.val();
+    clock.setEasingFunction(selection);
+  }
+
   //Create App
   PhiloGL('stage', {
     program: {
@@ -16,6 +21,9 @@ function App() {
       self.app = app;
       self.view = new PhiloGL.Mat4;
       self.renderer = new Renderer(app);
+      self.easerSelect = $('#easer-select');
+      self.easerSelect.change(setEaserSelection);
+      setEaserSelection(); // set easer function to what has been selected
 
       self.renderer.init();
 

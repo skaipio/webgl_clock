@@ -6,6 +6,16 @@ const white = [1, 1, 1, 1];
 function Clock() {
   const depth = -4;
   const self = this;
+  const beginningInput = $('#beginning-param');
+  const durationInput = $('#duration-param');
+  const changeInput = $('#change-param');
+  var easer = EasingFunctions.linear;
+  const easerParams = {
+    time: 0,
+    beginning: 0,
+    change: 1,
+    duration: 1
+  }
   this.sides = 12;
   this.parts = {
     outerEdges: ModelCreator.createCircleLoop(this.sides),
@@ -16,13 +26,28 @@ function Clock() {
 
   this.update = () => {
     var now = new Date();
+    var milliseconds = now.getMilliseconds() % 1000;
+    var easeAngle = 0;
+    
+    if (milliseconds >= 500) {
+      var frame = Math.PI * 2 / 60; // Divide to milliseconds
+      easerParams.time = (milliseconds-500)/500;
+      easerParams.beginning = parseFloat(beginningInput.val()) || 0;
+      easerParams.duration = parseFloat(durationInput.val()) || 1;
+      easerParams.change = parseFloat(changeInput.val()) || 1;
+      easeAngle = easer.apply(null, Object.values(easerParams)) * frame;
+    }
 
-    setPartRotation('secondsPointer', -getPointerAngle(now.getSeconds(), 60));
+    setPartRotation('secondsPointer', -getPointerAngle(now.getSeconds(), 60) - easeAngle);
     setPartRotation('minutesPointer', -getPointerAngle(now.getMinutes(), 60));
     setPartRotation('hoursPointer', -getPointerAngle(now.getHours(), 12));
   }
 
   this.getPart = (partKey) => this.parts[partKey];
+
+  this.setEasingFunction = (key) => {
+    easer = EasingFunctions[key];
+  }
 
   Object.keys(this.parts).forEach(function(key) {
     var prop = self.getPart(key);
