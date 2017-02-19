@@ -12,8 +12,12 @@
 </head>
 
 <style>
+  body {
+    background-color: black;
+    color: white;
+  }
+
   .flex-container {
-    padding-bottom: 0.5em;
     display: flex;
   }
 
@@ -68,10 +72,8 @@
 </script>
 
 <body onload="startApp();">
-  <div class="flex-container centered">
+  <div class="flex-container vertical centered">
     <h1>WebGL Clock</h1>
-  </div>
-  <div class="flex-container centered">
     <h2 id="time-display"></h2>
   </div>
   <div class="flex-container vertical centered">
